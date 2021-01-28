@@ -1,0 +1,32 @@
+<!--pages/orderDetail/indx.wxml-->
+<cu-custom bgColor="bg-user-color" class="custom">
+  <view slot="content">订单详情</view>
+</cu-custom>
+<view class="orderDetailWrap">
+  <view class="orderDetail">
+    <view class="equipmentWrap">
+      <image src="../../resource/img/background_home.png"></image>
+      <view class="equipment">
+        <view class="equipment-item">
+          <image class="equipment-item-img" src="../../resource/img/location.png"></image>
+          <view class="equipment-item-name">门店：{{pointName}}</view>
+        </view>
+        <view class="equipment-item">
+          <image src="../../resource/img/device.png"></image>
+          <view class="equipmentName">设备：{{merchantID}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="goodsDetail">
+      <view class="goods-title">
+        <image class="goods-title-img" src="../../resource/img/goods.png"></image>
+        <view class="goods-title-text">商品明细：</view>
+      </view>
+      <view class="particulars">
+        <view class="particulars-item">
+          
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

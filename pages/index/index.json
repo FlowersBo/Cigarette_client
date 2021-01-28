@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+  },
+  "onReachBottomDistance": 0,
+  "backgroundTextStyle": "dark",
+  "enablePullDownRefresh": false,
+  "navigationStyle": "custom"
+}

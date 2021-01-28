@@ -1,0 +1,7 @@
+{
+  "usingComponents":{
+    "mask": "../../component/mask"
+  },
+  "navigationStyle": "custom",
+  "enablePullDownRefresh": false
+}

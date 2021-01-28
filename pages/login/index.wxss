@@ -1,0 +1,59 @@
+.destinationWrap {
+  width: 100%;
+}
+
+.destination {
+  width: 100%;
+}
+.background-img{
+  position: relative;  
+  width: 100%;
+  height: 580px;
+}
+.background-img image{
+  width: 100%;
+  height: 100%;
+}
+.userInfo {
+  position: absolute;
+  top: 150rpx;
+  left: 40rpx;
+  font-size: 32rpx;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.userinfo-avatar {
+  overflow: hidden;
+  display: block;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.btnNavWrap {
+  margin-top: 65rpx;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userBtn {
+  width: 640rpx;
+  height: 100rpx;
+  text-align: center;
+  line-height: 100rpx;
+  background-color: #FF9900;
+  box-shadow: 0 0 10px #FF9900;
+  color: #fff;
+  font-size: 40rpx;
+  font-weight: bold;
+  letter-spacing: 20rpx;
+  display: block;
+  border-radius: 50rpx;
+}

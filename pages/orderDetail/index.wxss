@@ -1,0 +1,74 @@
+/* pages/orderDetail/indx.wxss */
+.orderDetailWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #333;
+}
+
+.orderDetail {
+  width: 97%;
+}
+
+.equipmentWrap {
+  width: 100%;
+  height: 200rpx;
+  position: relative;
+  margin: 20rpx 0;
+}
+
+.equipmentWrap image {
+  width: 100%;
+  height: 100%;
+}
+
+.equipment {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.equipment-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.equipment-item image {
+  width: 34rpx;
+  height: 36rpx;
+  margin-right: 10rpx;
+}
+
+.equipment-item image:first-child {
+  height: 38rpx;
+}
+
+.goodsDetail {
+  width: 100%;
+  background-color: #fff;
+  padding: 14rpx;
+  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+}
+.goods-title{
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.goods-title-img{
+  width: 36rpx;
+  height: 36rpx;
+  margin-right: 10rpx;
+}

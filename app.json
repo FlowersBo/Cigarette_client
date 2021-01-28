@@ -1,0 +1,30 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/user/index",
+    "pages/index/index",
+    "pages/cs/index",
+    "pages/orderList/index",
+    "pages/orderDetail/index"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#5069A1",
+    "navigationBarTitleText": "售烟柜",
+    "navigationBarTextStyle": "white",
+    "enablePullDownRefresh": false,
+    "backgroundColor": "#fff",
+    "navigationStyle": "custom"
+  },
+  "usingComponents": {
+    "cu-custom": "/colorui/components/cu-custom",
+    "scroll-y": "/component/scroll-y/index",
+    "noData": "/component/noData/noData"
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "你的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}

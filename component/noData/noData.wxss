@@ -1,0 +1,24 @@
+/* component/noData/noData.wxss */
+@import "/utils/iconfont.wxss";
+.iconWrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 200rpx;
+}
+
+.iconNone {
+  display: none;
+}
+
+.mask_icon {
+  font-size: 400rpx;
+  color: #FF9900;
+}
+
+.icon_text {
+  color: #FF9900;
+  margin-top: 30rpx;
+}

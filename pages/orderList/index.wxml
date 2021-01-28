@@ -1,0 +1,78 @@
+<!--pages/orderList/index.wxml-->
+<!-- bgColor="bg-user-color" -->
+<cu-custom bgColor="bg-user-color" class="custom">
+  <view slot="content">订单</view>
+  <!-- <view slot="backText">返回</view> -->
+</cu-custom>
+<scroll-y class="scroll-view" pull="{{pull}}" push="{{push}}" listLength="{{clueData.length}}"
+  style="position: absolute;top: {{customHeight}}px;bottom: 0;width: 100%;flex: 1;" bindrefresh="refresh"
+  bindtoload="toload">
+  <!-- 日期选择 -->
+  <view class="{{count?'con':'iconNone'}}">
+    <view wx:if="{{priceSum>=0}}" class="priceNumber">当日销售总额：<text style="color:#179B17">{{priceSum}}</text>元</view>
+    <view></view>
+    <view class="orderDate" title="日期">
+      <picker data-field="date" mode="date" value="{{date}}" bindchange="bindDateChange">
+        <input class="weui-input" placeholder="请选择日期" disabled='true' value="{{date}}"></input>
+      </picker>
+      <image src="../../assets/img/timg.png" alt="" mode="aspectFit" />
+    </view>
+  </view>
+
+  <view class="orderListWrap">
+    <block wx:for="{{orderList}}" wx:key="index">
+      <view class="orderList" data-id="{{item.id}}" bindtap="clickOrder">
+        <view class="order">
+          <!-- <view class="order_title">
+            <view class="order_status">
+              <view class="order_status_img">
+                <image
+                  src="{{openid == '0'?'../../resource/img/little-bag.png':openid == '1'?'../../resource/img/middle-bag.png':'../../resource/img/big-bag.png'}}">
+                </image>
+              </view>
+              <view class="order_status_text">{{item.orderStatus}}</view>
+            </view>
+            <view class="order_money" wx:if="{{item.orderStatus=='已完成'}}">￥{{item.orderPrice}}</view>
+          </view> -->
+          <view class="order_content">
+            <view class="order_detail">
+              <view class="detail_name">订单编号：</view>
+              <view class="detail_content">{{item.orderNo}}</view>
+            </view>
+            <view class="order_detail">
+              <view class="detail_name">交易时间：</view>
+              <view class="detail_content">{{item.createDate}}</view>
+            </view>
+            <view class="order_detail">
+              <view class="detail_name">点位名称：</view>
+              <view class="detail_content">{{item.pointName}}</view>
+            </view>
+            <block>
+              <view class="order_detail">
+                <view class="detail_name">订单金额：</view>
+                <view class="detail_content">{{item.orderPrice}}元</view>
+              </view>
+              <view class="order_detail">
+                <view class="detail_name">支付方式：</view>
+                <view class="detail_content">微信</view>
+              </view>
+              <view class="goodsList">
+                <view class="detail_name">商品名称：</view>
+                <view class="goods">
+                  <view class="goodsName" wx:for="{{item.detailsList}}" wx:for-item="tagarr" wx:key="index"><text
+                      space>{{tagarr.productName}} </text>x{{tagarr.quantity}}</view>
+                </view>
+              </view>
+            </block>
+          </view>
+        </view>
+        <icon class="iconfont iconduigou1"></icon>
+      </view>
+    </block>
+  </view>
+  <noData isFlag="{{isFlag}}"></noData>
+</scroll-y>
+<!-- <view class="{{isFlag?'iconWrap':'iconNone'}}">
+  <icon class="iconfont icon iconzanwushuju"></icon>
+  <text class="icon_text">暂无数据，亲亲稍后再来吧~~</text>
+</view> -->
