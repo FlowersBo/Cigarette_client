@@ -2,12 +2,12 @@
   <view class="destination">
     <view class="background-img">
       <image mode="aspectFill" src="/resource/img/background_img.png"></image>
-      <view class="userInfo" bindtap="gotouser">
+      <navigator url="../user/index" class="userInfo">
         <view class="userinfo-avatar">
           <open-data type="userAvatarUrl" class="userAvatarUrl"></open-data>
         </view>
         <open-data type="userNickName" class="userNickName"></open-data>
-      </view>
+      </navigator>
     </view>
     <view class="btnNavWrap">
       <view class="userBtn" hover-class="getNum_hover" hover-stay-time="100" bindtap="scanCode">扫码购买</view>

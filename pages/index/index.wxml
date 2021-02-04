@@ -1,5 +1,5 @@
 <!--index.wxml-->
-<cu-custom bgColor="bg-user-color" class="custom">
+<cu-custom bgColor="bg-user-color" isCustomHome class="custom">
   <view slot="content">购物车</view>
 </cu-custom>
 <!-- <scroll-y class="scroll-view" pull="{{pull}}" push="{{push}}" listLength="{{clueData.length}}"
@@ -85,7 +85,8 @@
         </view>
 
         <view class="orderPayWrap">
-          <button disabled="{{disabled}}" class="btn" bindtap="gotoOrderFn">会员支付</button>
+          <button wx:if="{{memberPay==='0'}}" disabled="{{disabled}}" class="btn" bindtap="gotoOrderFn">会员支付</button>
+          <view wx:else></view>
           <button disabled="{{disabled}}" class="btn" bindtap="submitOrder">微信支付</button>
         </view>
       </view>

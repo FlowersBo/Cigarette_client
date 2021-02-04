@@ -13,5 +13,8 @@ module.exports = {
     ConfirmOrder: ApiRootUrl + 'tobaccos/payment/confirmOrder', //提交订单
 
     Wxpay: ApiRootUrl + 'tobaccos/payment/wx_pay', //支付
+    
+    OrderList: ApiRootUrl + 'tobaccos/payment/orderList',
+    OrderDetails: ApiRootUrl + 'tobaccos/payment/orderDetails',
 
 }

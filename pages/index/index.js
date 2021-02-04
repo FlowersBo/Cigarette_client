@@ -7,18 +7,45 @@ let that;
 Page({
   data: {
     GoodsCartList: [],
-    // hasList: false,          // 列表是否有数据
+    hasList: true, // 列表是否有数据
     // show_edit: "block",
     // edit_name: "编辑",
     edit_show: "none",
-    // 默认展示数据
-    hasList: true,
     // 全选状态
     selectAllStatus: true, // 全选状态，默认全选
   },
 
-  onLoad: function () {
+  onLoad: function (options) {
     that = this;
+    console.log("获取参数", options);
+    let factoryNO = options.factoryNO;
+    if (factoryNO) {
+      that.setData({
+        factoryNO: options.factoryNO,
+        device_details_ids: options.device_details_ids
+      })
+    } else {
+      let path = decodeURIComponent(options.id);
+      console.log('解码', path);
+      path = path.split('vd/')[1].split('?id=');
+      path[1] = path[1].replaceAll('|', '-')
+      console.log('截取', path);
+      let [factoryNO, device_details_ids] = path;
+      console.log('截取后', factoryNO, device_details_ids);
+      that.setData({
+        factoryNO: factoryNO,
+        device_details_ids: device_details_ids
+      })
+
+      // const eventChannel = this.getOpenerEventChannel();
+      // eventChannel.on('acceptDataFromOpenerPage', function (data) {
+      //   console.log('接收参数', data);
+      //   that.setData({
+      //     device_details_ids: data.device_details_ids,
+      //     factoryNO: data.factoryNO
+      //   })
+      // })
+    }
     that.wxLogin();
   },
   // 登录
@@ -26,34 +53,33 @@ Page({
     mClient.login()
       .then(resp => {
         console.log('code', resp);
-        wx.setStorageSync('open_id', 'oO8CL5YcvcNcjzX8tqAJjpSk-pWU');
-        that.goodsCartFn();
-        // if (resp) {
-        //   let data = {
-        //     js_code: resp
-        //   }
-        //   mClient.wxGetRequest(api.Login, data)
-        //     .then(resp => {
-        //       console.log("授权返回参数", resp);
-        //       if (resp.data.code == "200") {
-        //         wx.setStorageSync('open_id', resp.data.data.openid);
-        //         // wx.setStorageSync('sessionKey', resp.data.data.sessionKey);
-        //         that.goodsCartFn();
-        //         //用户已点击;授权
-        //       } else {
-        //         wx.showToast({
-        //           title: '授权失败',
-        //           icon: 'none',
-        //           duration: 1000
-        //         })
-        //       }
-        //     })
-        //     .catch(rej => {
-        //       console.log(rej)
-        //     })
-        // } else {
-        //   console.log('获取用户登录态失败！' + res);
-        // }
+        // wx.setStorageSync('open_id', 'oO8CL5YcvcNcjzX8tqAJjpSk-pWU');
+        // that.goodsCartFn();
+        if (resp) {
+          let data = {
+            js_code: resp
+          }
+          mClient.wxGetRequest(api.Login, data)
+            .then(resp => {
+              console.log("授权返回参数", resp);
+              if (resp.data.code == "200") {
+                wx.setStorageSync('open_id', resp.data.data.openid);
+                that.goodsCartFn();
+                //用户已点击;授权
+              } else {
+                wx.showToast({
+                  title: '授权失败',
+                  icon: 'none',
+                  duration: 1000
+                })
+              }
+            })
+            .catch(rej => {
+              console.log(rej)
+            })
+        } else {
+          console.log('获取用户登录态失败！' + res);
+        }
       })
       .catch(rej => {
         console.log(rej)
@@ -63,9 +89,14 @@ Page({
   goodsCartFn: () => {
     let data = {
       openid: wx.getStorageSync('open_id'),
-      device_details_ids: '1350006222622818304-1350006222870282240-1350006223365210112',
-      factoryNO: 'C11010120100100001'
+      device_details_ids: that.data.device_details_ids,
+      factoryNO: that.data.factoryNO
     }
+    // let data = {
+    //   openid: wx.getStorageSync('open_id'),
+    //   device_details_ids: '1354728575307087872-1354728578029191168-1354728580487053312-1354728582936526848',
+    //   factoryNO: 'TC8CFCA0158066'
+    // }
     mClient.wxGetRequest(api.GoodsCart, data)
       .then(resp => {
         console.log("购物车返回参数", resp);
@@ -87,14 +118,25 @@ Page({
                 }
               }
             }
+            if (resp.data.data.memberPay === '0') {
+              that.setData({
+                isShow: false
+              })
+            } else {
+              that.setData({
+                isShow: true
+              })
+            }
             that.setData({
               GoodsCartList: GoodsCartList,
               pointName: resp.data.data.pointName,
+              memberPay: resp.data.data.memberPay,
               merchantID: resp.data.data.merchantID,
               orderPrice: resp.data.data.orderPrice,
               orderid: resp.data.data.orderid,
+              identificationLevel: resp.data.data.identificationLevel,
               orderIdList: orderIdList,
-              orderIdListWrap: orderIdListWrap
+              orderIdListWrap: orderIdListWrap,
             })
           }
         } else {
@@ -270,10 +312,16 @@ Page({
               'signType': info.payinfo.signType,
               'paySign': info.payinfo.paySign,
               'success': function (res) {
-
+                console.log('支付成功', res)
+                wx.redirectTo({
+                  url: '/pages/orderDetail/index?orderid=' + that.data.orderid
+                })
               },
               'fail': function (res) {
-                
+                console.log('支付失败', res);
+                wx.redirectTo({
+                  url: '/pages/login/index'
+                })
               },
               'complete': function (res) {
 

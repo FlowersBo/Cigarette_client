@@ -1,5 +1,5 @@
 <!--pages/orderDetail/indx.wxml-->
-<cu-custom bgColor="bg-user-color" class="custom">
+<cu-custom bgColor="bg-user-color" isCustom class="custom">
   <view slot="content">订单详情</view>
 </cu-custom>
 <view class="orderDetailWrap">
@@ -9,11 +9,11 @@
       <view class="equipment">
         <view class="equipment-item">
           <image class="equipment-item-img" src="../../resource/img/location.png"></image>
-          <view class="equipment-item-name">门店：{{pointName}}</view>
+          <view class="equipment-item-name">门店：{{orderDetail.pointName}}</view>
         </view>
         <view class="equipment-item">
           <image src="../../resource/img/device.png"></image>
-          <view class="equipmentName">设备：{{merchantID}}</view>
+          <view class="equipmentName">设备：{{orderDetail.merchantNO}}</view>
         </view>
       </view>
     </view>
@@ -23,8 +23,40 @@
         <view class="goods-title-text">商品明细：</view>
       </view>
       <view class="particulars">
-        <view class="particulars-item">
-          
+        <view class="particulars-item" wx:for="{{orderDetail.tbOrderDetailsList}}" wx:key="index">
+          <view class="goods-item">
+            <image class="goods-img" src="{{item.url}}"></image>
+            <view class="goods">
+              <image class="label" src="../../resource/img/label.png"></image>
+              <view class="goodsName">{{item.productName}}</view>
+            </view>
+          </view>
+          <view class="goods-item">x{{item.quantity}}</view>
+          <view class="goods-item">￥{{item.price}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="orderWrap">
+      <view class="order">
+        <view class="order-item">
+          <image class="order-item-img" src="../../resource/img/money.png"></image>
+          <view class="order-item-name">订单金额：￥{{tbOrderInfo.orderPrice}}</view>
+        </view>
+        <view class="order-item">
+          <image src="../../resource/img/payment.png"></image>
+          <view class="orderName">支付方式：{{tbOrderInfo.payPlatform}}</view>
+        </view>
+      </view>
+    </view>
+    <view class="orderWrap">
+      <view class="order">
+        <view class="order-item">
+          <image class="order-item-img" src="../../resource/img/number.png"></image>
+          <view class="order-item-name">订单编号：{{tbOrderInfo.id}}</view>
+        </view>
+        <view class="order-item">
+          <image src="../../resource/img/time.png"></image>
+          <view class="orderName">下单时间：{{tbOrderInfo.payDate?tbOrderInfo.payDate:''}}</view>
         </view>
       </view>
     </view>

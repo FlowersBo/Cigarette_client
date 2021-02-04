@@ -1,12 +1,11 @@
 <!--pages/cs/index.wxml-->
-<cu-custom bgColor="bg-user-color">
-  <view slot="content">测试</view>
-</cu-custom>
 <view class="container">
-  <camera class="camera" device-position='front' flash='off' binderror='error' frame-size='small'>
-  </camera>
-  <view class="fc"></view>
-  <button class="btn" type="primary" bindtap="addCameraListener">{{ status === 0 ? '开启检测' : '停止检测' }}</button>
-  <text class="result">{{result}}</text>
-  <image mode="aspectFill" class="result-img" src="{{ faceImg }}"></image>
+  <!-- 相机组件 -->
+  <camera class="camera" device-position="front" flash="off" binderror="error"></camera>
+  <view class="button_container">
+    <!-- 按钮组件，点击上传人脸库 -->
+    <button class="button" bindtap="takePhoto">上传人脸库 </button>
+    <!-- 按钮组件，进行人脸识别 -->
+    <button class="button" bindtap="check">人脸库识别 </button>
+  </view>
 </view>

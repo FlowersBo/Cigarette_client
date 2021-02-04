@@ -58,7 +58,7 @@ Page({
   },
 
   onShow: function () {
-    that.userInfoFn();
+    // that.userInfoFn();
   },
 
 

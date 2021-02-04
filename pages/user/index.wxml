@@ -19,11 +19,11 @@
       <open-data type="userNickName" class="userNickName"></open-data>
     </view>
   <view class="marketMoneyWrap">
-    <view class="subdivideWrap">
+    <navigator url="../orderList/index" class="subdivideWrap">
       <image class="subdivide-icon" src="/resource/img/order.png"></image>
       <view class="subdivide">我的订单</view>
       <icon class="iconfont iconperson-right subdivideState"></icon>
-    </view>
+    </navigator>
     <view class="subdivideWrap">
       <image class="subdivide-icon" src="/resource/img/verification.png"></image>
       <view class="subdivide">身份核验</view>

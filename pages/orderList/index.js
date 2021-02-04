@@ -14,7 +14,7 @@ Page({
     orderList: [],
     pageIndex: '1',
     pageSize: '10',
-    isFlag: false,
+    isFlag: true,
     pull: {
       isLoading: false,
       loading: '../../resource/img/pull_refresh.gif',
@@ -25,8 +25,6 @@ Page({
       loading: '../../resource/img/pull_refresh.gif',
       pullText: ''
     },
-    date: '',
-    priceSum: -1, //当日销售总额
   },
 
   /**
@@ -35,36 +33,35 @@ Page({
   onLoad: function (options) {
     that = this;
     let pageIndex = '1';
-    // let date = util.customFormatTime(new Date());
-    // that.setData({
-    //   date: date
-    // })
     that.orderListFn(pageIndex);
   },
 
   // 订单列表
-  orderListFn: (pageIndex,searchDate) => {
+  orderListFn: (pageIndex) => {
     that.setData({
       isFlag: false
     })
     const data = {
       pageSize: that.data.pageSize,
       pageIndex,
-      pointId: wx.getStorageSync('pointId'),
-      searchDate
+      openid: wx.getStorageSync('open_id')
     }
     mClient.wxGetRequest(api.OrderList, data)
       .then(res => {
         console.log("订单列表", res);
         if (res.data.code == "200") {
           let orderList = res.data.data.orderList;
-          // that.setData({
-          //   priceSum: res.data.data.priceSum
-          // })
-          if (orderList) {
-            orderList.forEach(element => {
-              element.createDate = util.timestampToTimeLong(element.createDate);
-            });
+          for (const key in orderList) {
+            if (orderList.hasOwnProperty(key)) {
+              const element = orderList[key];
+              if(element.orderStatus==='2'){
+                element.orderStatus='已完成'
+              }else if(element.orderStatus==='1'){
+                element.orderStatus='待支付'
+              }else{
+                element.orderStatus='已取消'
+              }
+            }
           }
           orderList = that.data.orderList.concat(orderList);
           if (orderList.length >= 10) {
@@ -108,22 +105,12 @@ Page({
       })
   },
 
-  //日期选择
-  bindDateChange: (e) => {
-    console.log(e);
-    let date = e.detail.value;
-    that.setData({
-      date: date,
-      'push.pullText': ''
+  gotoOrderDetailFn: e=>{
+    let id= e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: '../orderDetail/index?orderid='+id,
     })
-    let pageIndex = '1';
-    that.setData({
-      pageIndex: '1',
-      orderList: []
-    })
-    that.orderListFn(pageIndex, date);
   },
-
 
   refresh() {
     let pageIndex = '1';
@@ -131,8 +118,6 @@ Page({
     that.setData({
       pageIndex: '1',
       orderList: [],
-      date: '',
-      priceSum: -1
     })
     if (that.data.orderList.length <= 0) {
       that.setData({
@@ -156,8 +141,6 @@ Page({
   toload() {
     let pageIndex = that.data.pageIndex;
     let count = that.data.count;
-    let date = that.data.date;
-    console.log('加载时时间', date);
     if (that.data.orderList.length < count) {
       that.setData({
         'push.isLoading': true,
@@ -168,7 +151,7 @@ Page({
       console.log(pageIndex)
       pageIndex = String(pageIndex);
       console.log(pageIndex)
-      that.orderListFn(pageIndex, date);
+      that.orderListFn(pageIndex);
       setTimeout(() => {
         that.setData({
           pageIndex: pageIndex,
