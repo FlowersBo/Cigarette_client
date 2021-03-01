@@ -56,8 +56,8 @@ Page({
               const element = orderList[key];
               if(element.orderStatus==='2'){
                 element.orderStatus='已完成'
-              }else if(element.orderStatus==='1'){
-                element.orderStatus='待支付'
+              }else if(element.orderStatus==='3'){
+                element.orderStatus='出货失败'
               }else{
                 element.orderStatus='已取消'
               }

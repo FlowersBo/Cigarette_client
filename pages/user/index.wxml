@@ -12,22 +12,22 @@
   <view class="userNavImg">
     <image src="/resource/img/userNavImg.png"></image>
   </view>
-    <view class="userInfo">
-      <view class="userinfo-avatar">
-        <open-data type="userAvatarUrl" class="userAvatarUrl"></open-data>
-      </view>
-      <open-data type="userNickName" class="userNickName"></open-data>
+  <view class="userInfo">
+    <view class="userinfo-avatar">
+      <open-data type="userAvatarUrl" class="userAvatarUrl"></open-data>
     </view>
+    <open-data type="userNickName" class="userNickName"></open-data>
+  </view>
   <view class="marketMoneyWrap">
-    <navigator url="../orderList/index" class="subdivideWrap">
+    <navigator url="../orderList/index" hover-class="none" class="subdivideWrap">
       <image class="subdivide-icon" src="/resource/img/order.png"></image>
       <view class="subdivide">我的订单</view>
       <icon class="iconfont iconperson-right subdivideState"></icon>
     </navigator>
-    <view class="subdivideWrap">
+    <view bindtap="faceFn" class="subdivideWrap">
       <image class="subdivide-icon" src="/resource/img/verification.png"></image>
       <view class="subdivide">身份核验</view>
-      <view class="subdivideState">未完成</view>
+      <view class="subdivideState">{{adult===0?'认证未完成':(adult===1?'初步认证完成':'认证已完成')}}</view>
       <view>
       </view>
     </view>

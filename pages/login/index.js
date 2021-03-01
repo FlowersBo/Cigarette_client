@@ -27,6 +27,7 @@ Page({
               console.log("授权返回参数", resp);
               if (resp.data.code == "200") {
                 wx.setStorageSync('open_id', resp.data.data.openid);
+                wx.setStorageSync('customerId', resp.data.data.customerId);
               } else {
                 wx.showToast({
                   title: '授权失败',

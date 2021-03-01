@@ -3,9 +3,10 @@
     "pages/login/index",
     "pages/user/index",
     "pages/index/index",
-    "pages/cs/index",
+    "pages/faceVerification/index",
     "pages/orderList/index",
-    "pages/orderDetail/index"
+    "pages/orderDetail/index",
+    "pages/faceVerification/infoIdCard/index"
   ],
   "window": {
     "backgroundTextStyle": "dark",

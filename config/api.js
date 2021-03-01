@@ -17,4 +17,8 @@ module.exports = {
     OrderList: ApiRootUrl + 'tobaccos/payment/orderList',
     OrderDetails: ApiRootUrl + 'tobaccos/payment/orderDetails',
 
+    Detect: ApiRootUrl + 'tobaccoss/person/detect', //无身份证人脸
+    Verify: ApiRootUrl + 'tobaccoss/person/verify',
+
+    GetAdult: ApiRootUrl + 'tobaccos/payment/getAdult' //我的验证状态
 }

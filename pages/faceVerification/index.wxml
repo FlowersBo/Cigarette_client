@@ -1,0 +1,58 @@
+<!--pages/cs/index.wxml-->
+<cu-custom bgColor="bg-user-color" isCustom class="custom">
+  <view slot="content">人脸识别</view>
+</cu-custom>
+<view class="drawer_box" wx:if="{{showModalStatus}}">
+  <view class="drawer_box_content">
+    <view class="drawer_box_contentText">
+      <view class="authorization_title">授权相机</view>
+      <view class="authorization_content">需获取您相机权限用于检测人脸,否则小程序功能将无法正常使用</view>
+    </view>
+  </view>
+  <view class="btnWrap">
+    <!-- <button open-type="openSetting" bindopensetting="callback">打开设置页</button> -->
+    <button class="drawer_box_btn" data-status="0" open-type="openSetting" catchtap="gotobargainDetailFun">允许</button>
+    <button class="drawer_box_btn" data-status="1" catchtap="gotobargainDetailFun">拒绝</button>
+  </view>
+</view>
+
+<view class="container" wx:if="{{cameraStatus}}">
+  <!-- 相机组件 -->
+  <camera class="camera" device-position="front" flash="auto" bindinitdone="initdonesFn" binderror="errorFn"></camera>
+  <view class="fc"></view>
+  <!-- <view class="button_container"> -->
+  <!-- 按钮组件，点击上传人脸库 -->
+  <!-- <button class="button" bindtap="takePhoto">上传照片</button> -->
+  <!-- 按钮组件，进行人脸识别 -->
+  <!-- <button class="button" bindtap="check">人脸识别</button> -->
+  <!-- </view> -->
+  <view class="flowWrap">
+    <view class="flow-title">拍摄须知</view>
+    <view class="flowImgWrap">
+      <view class="flow">
+        <view class="img">
+          <image mode="aspectFit" src="../../resource/img/face1.png"></image>
+        </view>
+        <view class="flow-text"> <text class="icon">√</text>正对手机</view>
+      </view>
+      <view class="flow">
+        <view class="img">
+          <image mode="aspectFit" src="../../resource/img/face2.png"></image>
+        </view>
+        <view class="flow-text"> <text class="icon">√</text>光线充足</view>
+      </view>
+      <view class="flow">
+        <view class="img img3">
+          <image mode="aspectFit" src="../../resource/img/face3.png"></image>
+        </view>
+        <view class="flow-text"> <text class="icon">√</text>放慢动作</view>
+      </view>
+    </view>
+  </view>
+
+  <mask id="mask" bind:statusNumber="statusNumberFn">
+    <view slot='isTitle'>提示</view>
+    <view slot='isContent'>{{errData}}</view>
+  </mask>
+  <!-- <view bindtap="fileFn">上传图片</view> -->
+</view>

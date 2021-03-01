@@ -58,7 +58,7 @@
     "coverView": true,
     "nodeModules": true,
     "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
+    "showShadowRootInWxmlPanel": false,
     "scopeDataCheck": false,
     "uglifyFileName": false,
     "checkInvalidKey": true,
@@ -84,8 +84,8 @@
     "minifyWXSS": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.10.4",
-  "appid": "wx2df3abb55434dcdd",
+  "libVersion": "2.12.2",
+  "appid": "wx41896596d76b49bd",
   "projectname": "Cigarette_client",
   "debugOptions": {
     "hidedInDevtools": []

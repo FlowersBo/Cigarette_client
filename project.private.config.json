@@ -49,6 +49,17 @@
           "pathName": "pages/login/index",
           "query": "",
           "scene": null
+        },
+        {
+          "name": "人脸",
+          "pathName": "pages/faceVerification/index",
+          "query": "",
+          "scene": null
+        },
+        {
+          "name": "id录入",
+          "pathName": "pages/faceVerification/infoIdCard/index",
+          "scene": null
         }
       ]
     }

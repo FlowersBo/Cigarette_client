@@ -5,94 +5,96 @@
 <!-- <scroll-y class="scroll-view" pull="{{pull}}" push="{{push}}" listLength="{{clueData.length}}"
   style="position: absolute;top: {{customHeight}}px;bottom: 0;width: 100%;flex: 1;" bindrefresh="refresh"
   bindtoload="toload"> -->
-  <view class="shopCarWrap">
-    <view class="shopCar">
-      <view wx:if="{{hasList}}">
-        <view class="equipmentWrap">
-          <image src="../../resource/img/background_home.png"></image>
-          <view class="equipment">
-            <view class="equipment-item">
-              <image class="equipment-item-img" src="../../resource/img/location.png"></image>
-              <view class="equipment-item-name">门店：{{pointName}}</view>
-            </view>
-            <view class="equipment-item">
-              <image src="../../resource/img/device.png"></image>
-              <view class="equipmentName">设备：{{merchantID}}</view>
-            </view>
+<view class="shopCarWrap">
+  <view class="shopCar">
+    <view wx:if="{{hasList}}">
+      <view class="equipmentWrap">
+        <image src="../../resource/img/background_home.png"></image>
+        <view class="equipment" style="position: absolute; left: 0rpx; top: 0rpx">
+          <view class="equipment-item">
+            <image class="equipment-item-img" src="../../resource/img/location.png"></image>
+            <view class="equipment-item-name">门店：{{pointName}}</view>
+          </view>
+          <view class="equipment-item">
+            <image src="../../resource/img/device.png"></image>
+            <view class="equipmentName">设备：{{merchantID}}</view>
           </view>
         </view>
-        <!-- 编辑 -->
-        <!-- <view class='edit'>
+      </view>
+      <!-- 编辑 -->
+      <!-- <view class='edit'>
             <label class='edit_btn' bindtap='btn_edit'>{{edit_name}}</label>
           </view> -->
-        <!-- 列表 -->
-        <view class="goodsWrap">
-          <view>
-            <view class="list" wx:for="{{GoodsCartList}}" wx:key="index">
-              <!-- radio选择IOCN -->
-              <!-- <image class='dele_edit' bindtap='deletes' data-id='{{item.id}}' style='display:{{edit_show}}'
+      <!-- 列表 -->
+      <view class="goodsWrap">
+        <view>
+          <view class="list" wx:for="{{GoodsCartList}}" wx:key="index">
+            <!-- radio选择IOCN -->
+            <!-- <image class='dele_edit' bindtap='deletes' data-id='{{item.id}}' style='display:{{edit_show}}'
               src='../../resource/img/device.png'></image> -->
-              <view class="goods">
-                <image wx:if="{{item.selected}}" data-id="{{item.id}}" data-selected="{{item.selected}}" class="radio_chek" bindtap="selectList"
-                  src='../../resource/img/radio_show.png'></image>
-                <!-- else -->
-                <image wx:else src='../../resource/img/radio_none.png' class="radio_chek" data-selected="{{item.selected}}" data-id="{{item.id}}"
-                  bindtap="selectList"></image>
-              </view>
+            <view class="goods">
+              <image wx:if="{{item.selected}}" data-id="{{item.id}}" data-selected="{{item.selected}}"
+                class="radio_chek" bindtap="selectList" src='../../resource/img/radio_show.png'></image>
+              <!-- else -->
+              <image wx:else src='../../resource/img/radio_none.png' class="radio_chek"
+                data-selected="{{item.selected}}" data-id="{{item.id}}" bindtap="selectList"></image>
+            </view>
 
-              <view class="goods">
-                <view class="goods-item">
-                  <image class="list_img" mode="aspectFit" src="{{item.url}}"></image>
-                  <view class="goodsDetail">
-                    <view class="list_name">{{item.productName}}</view>
-                    <view class="list_price">￥{{item.price}}</view>
-                  </view>
+            <view class="goods">
+              <view class="goods-item">
+                <image class="list_img" mode="aspectFit" src="{{item.url}}"></image>
+                <view class="goodsDetail">
+                  <view class="list_name">{{item.productName}}</view>
+                  <view class="list_price">￥{{item.price}}</view>
                 </view>
               </view>
-              <!-- 规格 -->
-              <!-- <text class="cart_g_name">规格 : {{item.pro_name}}</text> -->
-              <!-- 收藏 -->
-              <!-- <label class='collert' bindtap='btn_collert'>
+            </view>
+            <!-- 规格 -->
+            <!-- <text class="cart_g_name">规格 : {{item.pro_name}}</text> -->
+            <!-- 收藏 -->
+            <!-- <label class='collert' bindtap='btn_collert'>
               <image class='collert_img' src='../../resource/img/on_line.png'></image> 收藏
             </label> -->
 
-              <!-- 商品数量加减  style='display:{{show_edit}}'-->
-              <view class="goods">
-                <view class="carts-num">
-                  <!--减按钮  -->
-                  <lable class="minus {{item.isSub}}" bindtap="btn_minus" data-quan="{{item.quantity}}" data-id="{{item.id}}">-</lable>
-                  <!-- 文本框值 -->
-                  <label class="view_text_center">{{item.quantity}}</label>
-                  <!-- 加按钮-->
-                  <lable class="plus {{item.isAdd}}" bindtap="btn_add" data-quan="{{item.quantity}}" data-id="{{item.id}}">+</lable>
-                </view>
+            <!-- 商品数量加减  style='display:{{show_edit}}'-->
+            <view class="goods">
+              <view class="carts-num">
+                <!--减按钮  -->
+                <lable class="minus {{item.isSub}}" bindtap="btn_minus" data-quan="{{item.quantity}}"
+                  data-id="{{item.id}}">-</lable>
+                <!-- 文本框值 -->
+                <label class="view_text_center">{{item.quantity}}</label>
+                <!-- 加按钮-->
+                <lable class="plus {{item.isAdd}}" bindtap="btn_add" data-quan="{{item.quantity}}"
+                  data-id="{{item.id}}">+</lable>
               </view>
-              <!-- 删除 -->
-              <!-- <text class="list_del" bindtap="deleteList" data-id="{{item.id}}">×</text> -->
             </view>
-          </view>
-          <view class="cont_bot">
-            <view class="sel_count">
-              <image wx:if="{{selectAllStatus}}" class="total-select" bindtap="selectAll"
-                src='../../resource/img/radio_show.png'></image>
-              <image wx:else class="total-select" bindtap="selectAll" src='../../resource/img/radio_none.png'></image>
-              <text class='sel_count_name'>全选</text>
-            </view>
-            <lable class="count_price">合计：<text>￥{{orderPrice}}</text></lable>
-            <!-- 提交订单 -->
-            <!-- <label class='submit' bindtap='btn_submit_order'>提交订单</label> -->
+            <!-- 删除 -->
+            <!-- <text class="list_del" bindtap="deleteList" data-id="{{item.id}}">×</text> -->
           </view>
         </view>
-
-        <view class="orderPayWrap">
-          <button wx:if="{{memberPay==='0'}}" disabled="{{disabled}}" class="btn" bindtap="gotoOrderFn">会员支付</button>
-          <view wx:else></view>
-          <button disabled="{{disabled}}" class="btn" bindtap="submitOrder">微信支付</button>
+        <view class="cont_bot">
+          <view class="sel_count">
+            <image wx:if="{{selectAllStatus}}" class="total-select" bindtap="selectAll"
+              src='../../resource/img/radio_show.png'></image>
+            <image wx:else class="total-select" bindtap="selectAll" src='../../resource/img/radio_none.png'></image>
+            <text class='sel_count_name'>全选</text>
+          </view>
+          <lable class="count_price">合计：<text>￥{{orderPrice}}</text></lable>
+          <!-- 提交订单 -->
+          <!-- <label class='submit' bindtap='btn_submit_order'>提交订单</label> -->
         </view>
       </view>
-      <view wx:else>
-        <view class="list_none">购物车是空的哦~</view>
+
+      <view wx:if="{{GoodsCartList.length>0}}" class="orderPayWrap">
+        <button wx:if="{{memberPay==='1'}}" disabled="{{disabled}}" class="btn" bindtap="gotoOrderFn">会员支付</button>
+        <view wx:else></view>
+        <button disabled="{{disabled}}" class="btn" bindtap="submitOrder">微信支付</button>
       </view>
     </view>
+    <view wx:else>
+      <view class="list_none">购物车是空的哦~</view>
+    </view>
   </view>
+</view>
 <!-- </scroll-y> -->

@@ -74,7 +74,6 @@
 }
 
 .subdivide {
-  width: 80%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -87,9 +86,6 @@
   color: #ccc;
   margin-left: auto;
 }
-
-
-
 
 
 

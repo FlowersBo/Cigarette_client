@@ -27,17 +27,16 @@ Page({
 
   userInfoFn: () => {
     let data = {
-      username: wx.getStorageSync('username'),
+      customerId: wx.getStorageSync('customerId'),
     }
-    mClient.wxGetRequest(api.Info, data)
+    mClient.wxGetRequest(api.GetAdult, data)
       .then(resp => {
         console.log('我的返回', resp);
         if (resp.data.code == 200) {
           that.setData({
-            userInfo: resp.data.data.myPageMessage,
+            adult: resp.data.data.adult
           });
-          wx.setStorageSync('pointName', resp.data.data.myPageMessage.pointName);
-          wx.setStorageSync('pointId', resp.data.data.myPageMessage.pointId);
+
         } else {
           wx.showToast({
             title: resp.data.message,
@@ -45,20 +44,32 @@ Page({
             duration: 2000
           })
         }
-        wx.hideLoading();
       });
   },
 
-
+  faceFn: () => {
+    let adult = that.data.adult;
+    if (adult === 2) {
+      wx.showToast({
+        title: '身份核验已完成',
+        icon: 'none',
+        duration: 2000
+      })
+    } else {
+      wx.navigateTo({
+        url: "../faceVerification/index?identificationLevel=" + 3
+      })
+    }
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-    
+
   },
 
   onShow: function () {
-    // that.userInfoFn();
+    that.userInfoFn();
   },
 
 
@@ -66,7 +77,7 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function () {
-  
+
   },
 
   /**

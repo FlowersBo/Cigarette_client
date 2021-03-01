@@ -17,6 +17,11 @@ Page({
 
   onLoad: function (options) {
     that = this;
+    let myDate = new Date();
+    that.setData({
+      myDate: myDate
+    })
+
     console.log("获取参数", options);
     let factoryNO = options.factoryNO;
     if (factoryNO) {
@@ -46,7 +51,6 @@ Page({
       //   })
       // })
     }
-    that.wxLogin();
   },
   // 登录
   wxLogin: () => {
@@ -64,6 +68,7 @@ Page({
               console.log("授权返回参数", resp);
               if (resp.data.code == "200") {
                 wx.setStorageSync('open_id', resp.data.data.openid);
+                wx.setStorageSync('customerId', resp.data.data.customerId);
                 that.goodsCartFn();
                 //用户已点击;授权
               } else {
@@ -101,6 +106,12 @@ Page({
       .then(resp => {
         console.log("购物车返回参数", resp);
         if (resp.data.code == "200") {
+          let identificationLevel = resp.data.data.identificationLevel, //跳转人脸
+            adult = resp.data.data.adult;
+          that.setData({
+            identificationLevel: identificationLevel,
+            adult: adult
+          })
           let GoodsCartList = resp.data.data.orderDetailsList;
           if (GoodsCartList) {
             let orderIdList = [];
@@ -117,15 +128,6 @@ Page({
                   element.isSub = '';
                 }
               }
-            }
-            if (resp.data.data.memberPay === '0') {
-              that.setData({
-                isShow: false
-              })
-            } else {
-              that.setData({
-                isShow: true
-              })
             }
             that.setData({
               GoodsCartList: GoodsCartList,
@@ -264,11 +266,37 @@ Page({
   },
 
   submitOrder: () => {
+    console.log('购物车验证人脸状态', that.data.identificationLevel);
+    if (that.data.identificationLevel !== 0 && that.data.adult == 0) { // 0不核验 13首次 24每次 34填写身份证 12拍人脸就行
+      wx.navigateTo({
+        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+      })
+      return;
+    } else if ((that.data.identificationLevel == 3 || that.data.identificationLevel == 4) && that.data.adult == 1) {
+      wx.navigateTo({
+        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+      })
+      return;
+    } else if (that.data.identificationLevel == 2 && that.data.adult == 1) {
+      wx.navigateTo({
+        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+      })
+      return;
+    } else if (that.data.identificationLevel == 4 && that.data.adult == 2) {
+      wx.navigateTo({
+        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+      })
+      return;
+    }
+
     let orderIdList = that.data.orderIdList;
     let orderIdListWrap = that.data.orderIdListWrap;
     let arr = orderIdListWrap.filter(item => !orderIdList.some(ele => ele === item));
     console.log('合并去重(没选)', arr);
     console.log('选取', orderIdList);
+    that.setData({
+      disabled: true
+    })
     const data = {
       orderid: that.data.orderid,
       checked_ids: orderIdList,
@@ -291,6 +319,9 @@ Page({
       })
       .catch(rej => {
         console.log('无法请求', rej);
+        that.setData({
+          disabled: false
+        })
       })
   },
 
@@ -324,7 +355,9 @@ Page({
                 })
               },
               'complete': function (res) {
-
+                that.setData({
+                  disabled: false
+                })
               }
             })
           }
@@ -338,6 +371,9 @@ Page({
       })
       .catch(rej => {
         console.log('无法请求', rej);
+        that.setData({
+          disabled: false
+        })
       })
   },
 
@@ -446,11 +482,14 @@ Page({
       that.setData({
         customHeight: customHeight
       })
-    }).exec()
+    }).exec();
+    let myDate1 = new Date();
+    let date = myDate1.getTime() - that.data.myDate.getTime();
+    console.log(date);
   },
 
   onShow() {
-
+    that.wxLogin();
   },
 
   // 下边功能暂不使用

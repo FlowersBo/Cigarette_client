@@ -2,7 +2,7 @@
   <view class="destination">
     <view class="background-img">
       <image mode="aspectFill" src="/resource/img/background_img.png"></image>
-      <navigator url="../user/index" class="userInfo">
+      <navigator url="../user/index" hover-class="none" class="userInfo">
         <view class="userinfo-avatar">
           <open-data type="userAvatarUrl" class="userAvatarUrl"></open-data>
         </view>
