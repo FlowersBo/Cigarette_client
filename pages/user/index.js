@@ -23,6 +23,7 @@ Page({
     that = this;
     this.mask = this.selectComponent('#mask');
     let date = util.customFormatTime(new Date());
+    console.log('时间', date)
   },
 
   userInfoFn: () => {
@@ -57,7 +58,7 @@ Page({
       })
     } else {
       wx.navigateTo({
-        url: "../faceVerification/index?identificationLevel=" + 3
+        url: "/pages/infoIdCard/index?entrance=" + 'user'
       })
     }
   },

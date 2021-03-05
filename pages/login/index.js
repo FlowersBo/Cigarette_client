@@ -71,20 +71,34 @@ Page({
         console.log("扫码", res)
         let path = decodeURIComponent(res.result);
         console.log('解码', path);
-        path = path.split('vd/')[1].split('?id=');
-        path[1] = path[1].replaceAll('|', '-')
+        // path = path.split('vd/')[1].split('?id=');
+        path = path.split('cn/')[1];
+        let factoryNO = path.split('|')[0],
+          device_details_idsAll = path.split('|').splice(1);
+        console.log('设备id', factoryNO);
+        console.log('货道id', device_details_idsAll);
+        let str = '';
+        for (const key in device_details_idsAll) {
+          if (device_details_idsAll.hasOwnProperty(key)) {
+            const element = device_details_idsAll[key];
+            str += element + "-";
+          }
+        }
+        if (str.length > 3) {
+          str = str.substring(0, str.length - 1);
+        }
+        console.log('str', str);
+        // device_details_idsAll = device_details_idsAll.replaceAll('|', '-');
+
+        // path = path.split('|')[1];
+        // console.log('截取',path)
+        // path[1] = path[1].replaceAll('|', '-');
         // var pathPart = path.substring(0, 6);
-        console.log('截取', path);
-        let [factoryNO, device_details_ids] = path;
-        console.log('截取后', factoryNO, device_details_ids);
+        // console.log('截取', path);
+        // let [factoryNO, device_details_ids] = path;
+        // console.log('截取后', factoryNO, device_details_ids);
         wx.navigateTo({
-          url: '/pages/index/index?factoryNO=' + factoryNO + '&device_details_ids=' + device_details_ids,
-          // success: function (res) {
-          //   res.eventChannel.emit('acceptDataFromOpenerPage', {
-          //     device_details_ids: device_details_ids,
-          //     factoryNO: factoryNO
-          //   })
-          // }
+          url: '/pages/index/index?factoryNO=' + factoryNO + '&device_details_ids=' + str,
         })
       }
     })

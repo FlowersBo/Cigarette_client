@@ -19,7 +19,7 @@
             <view class="equipmentName">设备：{{item.merchantNO}}</view>
           </view>
           <view class="order-status">
-            <image src="{{item.orderStatus==='出货成功'?'../../resource/img/on_line.png':'../../resource/img/off_line.png'}}"></image>
+            <image src="{{item.orderStatus==='已完成'?'../../resource/img/on_line.png':'../../resource/img/off_line.png'}}"></image>
             <view>{{item.orderStatus}}</view>
           </view>
         </view>

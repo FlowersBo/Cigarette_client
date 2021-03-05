@@ -6,7 +6,7 @@
     "pages/faceVerification/index",
     "pages/orderList/index",
     "pages/orderDetail/index",
-    "pages/faceVerification/infoIdCard/index"
+    "pages/infoIdCard/index"
   ],
   "window": {
     "backgroundTextStyle": "dark",

@@ -18,6 +18,7 @@
   font-weight: 500;
   justify-content: space-between;
   padding-top: 100rpx;
+  color: #333;
 }
 
 .faceWrap image {

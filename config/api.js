@@ -1,6 +1,6 @@
-// const ApiRootUrl = 'https://w3.morninggo.cn/'; //晨购
+const ApiRootUrl = 'https://w3.morninggo.cn/'; //晨购
 // const ApiRootUrl = 'https://api.morninggo.cn/';
-const ApiRootUrl = 'http://192.168.126.247:8080/morninggo_app_http_war/';
+// const ApiRootUrl = 'http://192.168.126.247:8080/morninggo_app_http_war/';
 module.exports = {
     Login: ApiRootUrl + 'tobaccos/payment/checkUserByOpenid', //用户信息
 

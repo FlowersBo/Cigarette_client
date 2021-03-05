@@ -27,7 +27,7 @@
     <view bindtap="faceFn" class="subdivideWrap">
       <image class="subdivide-icon" src="/resource/img/verification.png"></image>
       <view class="subdivide">身份核验</view>
-      <view class="subdivideState">{{adult===0?'认证未完成':(adult===1?'初步认证完成':'认证已完成')}}</view>
+      <view class="subdivideState">{{adult===0?'核验未完成':(adult===1?'初步核验完成':'核验已完成')}}</view>
       <view>
       </view>
     </view>

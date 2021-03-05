@@ -30,27 +30,32 @@ Page({
         device_details_ids: options.device_details_ids
       })
     } else {
-      let path = decodeURIComponent(options.id);
+      console.log("外部扫码", res)
+      let path = decodeURIComponent(res.result);
       console.log('解码', path);
-      path = path.split('vd/')[1].split('?id=');
-      path[1] = path[1].replaceAll('|', '-')
-      console.log('截取', path);
-      let [factoryNO, device_details_ids] = path;
-      console.log('截取后', factoryNO, device_details_ids);
+      path = path.split('cn/')[1];
+      let factoryNO = path.split('|')[0],
+        device_details_idsAll = path.split('|').splice(1);
+      console.log('设备id', factoryNO);
+      console.log('货道id', device_details_idsAll);
+      let str = '';
+      for (const key in device_details_idsAll) {
+        if (device_details_idsAll.hasOwnProperty(key)) {
+          const element = device_details_idsAll[key];
+          str += element + "-";
+        }
+      }
+      if (str.length > 3) {
+        str = str.substring(0, str.length - 1);
+      }
+      console.log('str', str);
+      console.log('截取后', factoryNO, str);
       that.setData({
         factoryNO: factoryNO,
-        device_details_ids: device_details_ids
+        device_details_ids: str
       })
-
-      // const eventChannel = this.getOpenerEventChannel();
-      // eventChannel.on('acceptDataFromOpenerPage', function (data) {
-      //   console.log('接收参数', data);
-      //   that.setData({
-      //     device_details_ids: data.device_details_ids,
-      //     factoryNO: data.factoryNO
-      //   })
-      // })
-    }
+    };
+    that.wxLogin();
   },
   // 登录
   wxLogin: () => {
@@ -138,7 +143,7 @@ Page({
               orderid: resp.data.data.orderid,
               identificationLevel: resp.data.data.identificationLevel,
               orderIdList: orderIdList,
-              orderIdListWrap: orderIdListWrap,
+              orderIdListWrap: orderIdListWrap
             })
           }
         } else {
@@ -267,33 +272,47 @@ Page({
 
   submitOrder: () => {
     console.log('购物车验证人脸状态', that.data.identificationLevel);
-    if (that.data.identificationLevel !== 0 && that.data.adult == 0) { // 0不核验 13首次 24每次 34填写身份证 12拍人脸就行
+    if (that.data.orderPrice <= 0) {
+      wx.showToast({
+        title: '请选择商品后付款',
+        icon: 'none',
+        duration: 2000
+      })
+      return;
+    };
+    let orderIdList = that.data.orderIdList;
+    let orderIdListWrap = that.data.orderIdListWrap;
+    let orderid = that.data.orderid;
+    console.log('orderIdList='+orderIdList,'orderIdListWrap='+orderIdListWrap,'orderid='+orderid);
+    let arr = orderIdListWrap.filter(item => !orderIdList.some(ele => ele === item));
+    console.log('合并去重(没选)', arr);
+    console.log('选取', orderIdList);
+    if ((that.data.identificationLevel == 1 || that.data.identificationLevel == 2) && that.data.adult == 0) { // 0不核验 13首次 24每次 34填写身份证 12拍人脸就行
       wx.navigateTo({
-        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+        url: '/pages/faceVerification/index?checked_ids=' + JSON.stringify(orderIdList) + '&unchecked_ids=' + JSON.stringify(arr)+'&orderid='+orderid
+      })
+      return;
+    } else if ((that.data.identificationLevel == 3 || that.data.identificationLevel == 4) && that.data.adult == 0) {
+      wx.navigateTo({
+        url: '/pages/infoIdCard/index?checked_ids=' + JSON.stringify(orderIdList) + '&unchecked_ids=' + JSON.stringify(arr)+'&orderid='+orderid
       })
       return;
     } else if ((that.data.identificationLevel == 3 || that.data.identificationLevel == 4) && that.data.adult == 1) {
       wx.navigateTo({
-        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+        url: '/pages/infoIdCard/index?checked_ids=' + JSON.stringify(orderIdList) + '&unchecked_ids=' + JSON.stringify(arr)+'&orderid='+orderid
       })
       return;
     } else if (that.data.identificationLevel == 2 && that.data.adult == 1) {
       wx.navigateTo({
-        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+        url: '/pages/faceVerification/index?checked_ids=' + JSON.stringify(orderIdList) + '&unchecked_ids=' + JSON.stringify(arr)+'&orderid='+orderid
       })
       return;
     } else if (that.data.identificationLevel == 4 && that.data.adult == 2) {
       wx.navigateTo({
-        url: '/pages/faceVerification/index?identificationLevel=' + that.data.identificationLevel,
+        url: '/pages/infoIdCard/index?checked_ids=' + JSON.stringify(orderIdList) + '&unchecked_ids=' + JSON.stringify(arr)+'&orderid='+orderid
       })
       return;
     }
-
-    let orderIdList = that.data.orderIdList;
-    let orderIdListWrap = that.data.orderIdListWrap;
-    let arr = orderIdListWrap.filter(item => !orderIdList.some(ele => ele === item));
-    console.log('合并去重(没选)', arr);
-    console.log('选取', orderIdList);
     that.setData({
       disabled: true
     })
@@ -323,6 +342,7 @@ Page({
           disabled: false
         })
       })
+
   },
 
   wxpayFn: () => {
@@ -489,9 +509,29 @@ Page({
   },
 
   onShow() {
-    that.wxLogin();
+    that.userInfoFn();
   },
+  userInfoFn: () => {
+    let data = {
+      customerId: wx.getStorageSync('customerId'),
+    }
+    mClient.wxGetRequest(api.GetAdult, data)
+      .then(resp => {
+        console.log('我的返回', resp);
+        if (resp.data.code == 200) {
+          that.setData({
+            adult: resp.data.data.adult
+          });
 
+        } else {
+          wx.showToast({
+            title: resp.data.message,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      });
+  },
   // 下边功能暂不使用
 
 

@@ -32,14 +32,32 @@ Page({
   onLoad: function (options) {
     that = this;
     // that.wxLogin();
+    console.log('接收参数',options)
     this.mask = this.selectComponent('#mask');
-    let identificationLevel = options.identificationLevel;
-    if (identificationLevel) { // 13首次 24每次 34填写身份证 12拍人脸就行
-      console.log(identificationLevel)
+    let checked_ids = options.checked_ids,
+      unchecked_ids = options.unchecked_ids,
+      orderid = options.orderid,
+      infoName = options.infoName,
+      idCard = options.idCard,
+      entrance = options.entrance;
+    if (entrance) {
       that.setData({
-        identificationLevel: identificationLevel
+        entrance: entrance
       })
-    };
+    }
+    if (checked_ids && unchecked_ids) {
+      that.setData({
+        checked_ids: checked_ids,
+        unchecked_ids: unchecked_ids,
+        orderid: orderid
+      })
+    }
+    if (infoName && idCard) {
+      that.setData({
+        infoName: infoName,
+        idCard: idCard,
+      })
+    }
   },
 
   onShow: function () {
@@ -125,8 +143,8 @@ Page({
                   customerId: resp.data.data.customerId
                 })
                 if (!that.data.counting) {
-                  //开始倒计时3秒
-                  that.countDown(3);
+                  //开始倒计时
+                  that.countDown(4);
                 }
               } else {
                 wx.showToast({
@@ -158,7 +176,13 @@ Page({
           that.setData({
             tempImagePath: res.tempImagePath
           })
-          that.faceUpload();
+          let infoName = that.data.infoName,
+            idCard = that.data.idCard;
+          if (infoName && idCard) {
+            that.infoFaceUpload(infoName, idCard);
+          } else {
+            that.faceUpload();
+          }
 
           // wx.getFileSystemManager().readFile({
           //   filePath: res.tempImagePath,
@@ -206,67 +230,45 @@ Page({
 
   //人脸上传
   faceUpload: () => {
-    let identificationLevel = that.data.identificationLevel,
-      customerId = that.data.customerId,
+    let customerId = that.data.customerId,
       tempImagePath = that.data.tempImagePath;
-    if (identificationLevel === '3' || identificationLevel === '4') {
-      wx.redirectTo({
-        url: 'infoIdCard/index?customerId=' + customerId + '&tempImagePath=' + tempImagePath,
-      })
-    } else {
-      let data = {
-        customerId: customerId
-      }
-      let params = postParam(data);
-      console.log('返回data参数', params);
-      wx.uploadFile({
-        url: api.Detect + params,
-        filePath: tempImagePath,
-        name: 'file',
-        formData: {},
-        header: {
-          'Content-Type': 'multipart/form-data'
-        },
-        success: function (res) {
-          console.log('上传返回', res);
-          if (res.statusCode == 200) {
-            let data = JSON.parse(res.data);
-            console.log(data)
-            if (data.success) {
-              wx.showToast({
-                title: data.data,
-                icon: 'success',
-                image: '/resource/img/face0.png',
-                duration: 1500
-              })
-              setTimeout(() => {
-                wx.navigateBack({
-                  delta: 1
-                })
-              }, 1000)
-            } else {
-              that.setData({
-                errData: data.msg
-              })
-              that.mask.util('open');
-            }
-          } else {
+    let data = {
+      customerId: customerId
+    }
+    let params = postParam(data);
+    console.log('返回data参数', params);
+    wx.uploadFile({
+      url: api.Detect + params,
+      filePath: tempImagePath,
+      name: 'file',
+      formData: {},
+      header: {
+        'Content-Type': 'multipart/form-data'
+      },
+      success: function (res) {
+        console.log('上传返回', res);
+        if (res.statusCode == 200) {
+          let data = JSON.parse(res.data);
+          console.log(data)
+          if (data.success) {
             wx.showToast({
-              title: '人脸验证失败，请稍后重试',
-              icon: 'none',
+              title: data.data,
+              icon: 'success',
+              image: '/resource/img/face0.png',
               duration: 1500
             })
             setTimeout(() => {
-              wx.navigateBack({
-                delta: 1
-              })
-            }, 1000)
+              that.submitOrder();
+            }, 1500)
+          } else {
+            that.setData({
+              errData: data.msg
+            })
+            that.mask.util('open');
           }
-        },
-        fail: function (err) {
-          console.log('错误', err);
+        } else {
           wx.showToast({
-            title: err,
+            title: '人脸验证失败，请稍后重试',
             icon: 'none',
             duration: 1500
           })
@@ -274,16 +276,198 @@ Page({
             wx.navigateBack({
               delta: 1
             })
-          }, 1000)
+          }, 1500)
         }
-      })
-    }
+      },
+      fail: function (err) {
+        console.log('错误', err);
+        wx.showToast({
+          title: err,
+          icon: 'none',
+          duration: 1500
+        })
+        setTimeout(() => {
+          wx.navigateBack({
+            delta: 1
+          })
+        }, 1500)
+      }
+    })
   },
 
+  //身份人脸上传
+  infoFaceUpload: (infoName, idCard) => {
+    let customerId = that.data.customerId,
+      tempImagePath = that.data.tempImagePath;
+    let data = {
+      customerId: customerId,
+      name: infoName,
+      idCardNumber: idCard
+    }
+    let params = postParam(data);
+    console.log('返回data参数', params);
+    wx.uploadFile({
+      url: api.Verify + params,
+      filePath: tempImagePath,
+      name: 'file',
+      formData: {},
+      header: {
+        'Content-Type': 'multipart/form-data'
+      },
+      success: function (res) {
+        console.log('身份人脸上传返回', res);
+        if (res.statusCode == 200) {
+          let data = JSON.parse(res.data);
+          console.log(data);
+          if (data.success) {
+            wx.showToast({
+              title: data.data,
+              icon: 'none',
+              duration: 1500
+            })
+            setTimeout(() => {
+              if (that.data.entrance) {
+                wx.navigateBack({
+                  delta: 2
+                })
+              } else {
+                that.submitOrder();
+              }
+            }, 1500)
+          } else {
+            wx.showToast({
+              title: data.msg,
+              icon: 'none',
+              duration: 1500
+            });
+            setTimeout(() => {
+              wx.navigateBack({
+                delta: 1
+              })
+            }, 1500)
+          };
+        } else {
+          wx.showToast({
+            title: '人脸验证失败，请稍后重试',
+            icon: 'none',
+            duration: 1500
+          })
+          setTimeout(() => {
+            wx.navigateBack({
+              delta: 1
+            })
+          }, 1500)
+        }
+      },
+      fail: function (err) {
+        console.log('错误', err);
+        wx.showToast({
+          title: err,
+          icon: 'none',
+          duration: 1500
+        })
+        setTimeout(() => {
+          wx.navigateBack({
+            delta: 1
+          })
+        }, 1500)
+      },
+      complete: function (e) {
+
+      }
+    })
+  },
+  submitOrder: () => {
+    let checked_ids = JSON.parse(that.data.checked_ids),
+      unchecked_ids = JSON.parse(that.data.unchecked_ids);
+    console.log('checked_ids=' + checked_ids, 'unchecked_ids=' + unchecked_ids)
+    const data = {
+      orderid: that.data.orderid,
+      checked_ids: checked_ids,
+      unchecked_ids: unchecked_ids
+    };
+    mClient.wxRequest(api.ConfirmOrder, data)
+      .then(res => {
+        console.log("提交", res);
+        if (res.data.code == "200") {
+          if (res.data.data.finalPrice > 0) {
+            that.wxpayFn();
+          }
+        } else {
+          wx.showToast({
+            title: res.data.message,
+            icon: 'none',
+            duration: 2000
+          });
+          wx.reLaunch({
+            url: '/pages/login/index'
+          })
+        }
+      })
+      .catch(rej => {
+        console.log('无法请求', rej);
+        that.setData({
+          disabled: false
+        })
+      })
+
+  },
+
+  wxpayFn: () => {
+    const data = {
+      orderid: that.data.orderid,
+      openid: wx.getStorageSync('open_id')
+    };
+    mClient.wxRequest(api.Wxpay, data)
+      .then(res => {
+        console.log("支付", res);
+        if (res.data.code == "200") {
+          let info = res.data.data;
+          if (info) {
+            wx.requestPayment({
+              'timeStamp': info.payinfo.timeStamp,
+              'nonceStr': info.payinfo.nonceStr,
+              'package': info.payinfo.package,
+              'signType': info.payinfo.signType,
+              'paySign': info.payinfo.paySign,
+              'success': function (res) {
+                console.log('支付成功', res)
+                wx.reLaunch({
+                  url: '/pages/orderDetail/index?orderid=' + that.data.orderid
+                })
+              },
+              'fail': function (res) {
+                console.log('支付失败', res);
+                wx.reLaunch({
+                  url: '/pages/login/index'
+                })
+              },
+              'complete': function (res) {
+                that.setData({
+                  disabled: false
+                })
+              }
+            })
+          }
+        } else {
+          wx.showToast({
+            title: res.data.message,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+      .catch(rej => {
+        console.log('无法请求', rej);
+        that.setData({
+          disabled: false
+        })
+      })
+  },
   // mask模态框
   statusNumberFn: (e) => {
     if (e.detail.status === '0') {
-      that.countDown(3);
+      that.countDown(4);
     } else {
       try {
         wx.navigateBack({
