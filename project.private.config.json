@@ -57,8 +57,9 @@
           "scene": null
         },
         {
-          "name": "id录入",
-          "pathName": "pages/faceVerification/infoIdCard/index",
+          "name": "身份id",
+          "pathName": "pages/infoIdCard/index",
+          "query": "",
           "scene": null
         }
       ]

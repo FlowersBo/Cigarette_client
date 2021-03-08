@@ -32,7 +32,7 @@ Page({
   onLoad: function (options) {
     that = this;
     // that.wxLogin();
-    console.log('接收参数',options)
+    console.log('接收参数', options)
     this.mask = this.selectComponent('#mask');
     let checked_ids = options.checked_ids,
       unchecked_ids = options.unchecked_ids,
@@ -40,7 +40,7 @@ Page({
       infoName = options.infoName,
       idCard = options.idCard,
       entrance = options.entrance;
-    if (entrance) {
+    if (entrance === 'user') {
       that.setData({
         entrance: entrance
       })
@@ -144,7 +144,7 @@ Page({
                 })
                 if (!that.data.counting) {
                   //开始倒计时
-                  that.countDown(4);
+                  that.countDown(2);
                 }
               } else {
                 wx.showToast({
@@ -255,11 +255,9 @@ Page({
               title: data.data,
               icon: 'success',
               image: '/resource/img/face0.png',
-              duration: 1500
+              duration: 1000
             })
-            setTimeout(() => {
-              that.submitOrder();
-            }, 1500)
+            that.submitOrder();
           } else {
             that.setData({
               errData: data.msg
@@ -322,18 +320,20 @@ Page({
           if (data.success) {
             wx.showToast({
               title: data.data,
-              icon: 'none',
-              duration: 1500
+              icon: 'success',
+              image: '/resource/img/face0.png',
+              duration: 1000
             })
-            setTimeout(() => {
-              if (that.data.entrance) {
-                wx.navigateBack({
-                  delta: 2
-                })
-              } else {
-                that.submitOrder();
-              }
-            }, 1500)
+            if (that.data.entrance === 'user') {
+              wx.navigateBack({
+                delta: 2
+              })
+            } else {
+              that.setData({
+                cameraStatus: false
+              })
+              that.submitOrder();
+            }
           } else {
             wx.showToast({
               title: data.msg,
@@ -377,10 +377,27 @@ Page({
       }
     })
   },
+  
   submitOrder: () => {
+    // let checked_ids = that.data.checked_ids;
+    // console.log(Boolean(checked_ids));
+    // console.log(String(checked_ids));
+    // console.log(String(checked_ids));
+    // if (String(checked_ids) != 'undefined') {
     let checked_ids = JSON.parse(that.data.checked_ids),
       unchecked_ids = JSON.parse(that.data.unchecked_ids);
     console.log('checked_ids=' + checked_ids, 'unchecked_ids=' + unchecked_ids)
+    // } else {
+    //   wx.showToast({
+    //     title: '支付失败，请稍后重试',
+    //     icon: 'none',
+    //     duration: 2000
+    //   });
+    //   wx.reLaunch({
+    //     url: '/pages/login/index'
+    //   });
+    //   return;
+    // }
     const data = {
       orderid: that.data.orderid,
       checked_ids: checked_ids,
@@ -467,7 +484,7 @@ Page({
   // mask模态框
   statusNumberFn: (e) => {
     if (e.detail.status === '0') {
-      that.countDown(4);
+      that.countDown(2);
     } else {
       try {
         wx.navigateBack({

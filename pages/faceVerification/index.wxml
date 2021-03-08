@@ -18,7 +18,7 @@
 
 <view class="container" wx:if="{{cameraStatus}}">
   <!-- 相机组件 -->
-  <camera class="camera" device-position="front" flash="auto" bindinitdone="initdonesFn" binderror="errorFn"></camera>
+  <camera class="camera" device-position="front" flash="off" bindinitdone="initdonesFn" binderror="errorFn"></camera>
   <view class="fc"></view>
   <!-- <view class="button_container"> -->
   <!-- 按钮组件，点击上传人脸库 -->

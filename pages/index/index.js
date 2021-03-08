@@ -30,10 +30,10 @@ Page({
         device_details_ids: options.device_details_ids
       })
     } else {
-      console.log("外部扫码", res)
-      let path = decodeURIComponent(res.result);
+      console.log("外部扫码", options)
+      let path = decodeURIComponent(options.q);
       console.log('解码', path);
-      path = path.split('cn/')[1];
+      path = path.split('tb/')[1];
       let factoryNO = path.split('|')[0],
         device_details_idsAll = path.split('|').splice(1);
       console.log('设备id', factoryNO);

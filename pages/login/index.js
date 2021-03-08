@@ -72,7 +72,7 @@ Page({
         let path = decodeURIComponent(res.result);
         console.log('解码', path);
         // path = path.split('vd/')[1].split('?id=');
-        path = path.split('cn/')[1];
+        path = path.split('tb/')[1];
         let factoryNO = path.split('|')[0],
           device_details_idsAll = path.split('|').splice(1);
         console.log('设备id', factoryNO);
